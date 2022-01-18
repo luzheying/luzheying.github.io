@@ -1,0 +1,16 @@
+current directory: /Users/estellalu/Desktop/luzheying.github.io/vendor/cache/ruby/3.0.0/gems/unf_ext-0.0.8/ext/unf_ext
+/usr/local/opt/ruby/bin/ruby -I /usr/local/Cellar/ruby/3.0.2_1/lib/ruby/3.0.0 -r ./siteconf20220116-2577-ez5wji.rb extconf.rb
+checking for -lstdc++... yes
+creating Makefile
+
+current directory: /Users/estellalu/Desktop/luzheying.github.io/vendor/cache/ruby/3.0.0/gems/unf_ext-0.0.8/ext/unf_ext
+make DESTDIR\= clean
+
+current directory: /Users/estellalu/Desktop/luzheying.github.io/vendor/cache/ruby/3.0.0/gems/unf_ext-0.0.8/ext/unf_ext
+make DESTDIR\=
+compiling unf.cc
+linking shared-object unf_ext.bundle
+
+current directory: /Users/estellalu/Desktop/luzheying.github.io/vendor/cache/ruby/3.0.0/gems/unf_ext-0.0.8/ext/unf_ext
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 unf_ext.bundle ./.gem.20220116-2577-urhccp

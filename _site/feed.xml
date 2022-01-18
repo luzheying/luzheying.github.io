@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hi, I&apos;m Zheying Lu</title>
+    <description>A Master&apos;s student at Columbia studying computer science with a concentration in Vision, Graphic and Interaction. I work with backend and database. I&apos;m also a co-founder of Seeker, an online community for women in the workplace.</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 18 Jan 2022 01:00:41 -0500</pubDate>
+    <lastBuildDate>Tue, 18 Jan 2022 01:00:41 -0500</lastBuildDate>
+    <generator>Jekyll v3.9.0</generator>
+    
+      <item>
+        <title>Aligot: A tool for cryptographic function identification</title>
+        <description>&lt;p&gt;Aligot is a papar pubulished in 2012 and it has made a significant progress on cryptographic function identification. Here is the &lt;a href=&quot;https://hal.inria.fr/hal-00762924/document&quot;&gt;Aligo paper&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In this blog, I am going to share the notes i took when reading the paper.&lt;/p&gt;
+
+&lt;h3 id=&quot;introduction&quot;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;The importance of analyzing and identifying the use of crypto functions:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;get to know the intentions of those creating and deploying the malware.&lt;/li&gt;
+  &lt;li&gt;help identify the tool/method/people behind particular malware attacks.&lt;/li&gt;
+  &lt;li&gt;static unpackers — extract core logic or packed programs without executing them — write signatures on malware core features.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Problem: most existing tools are ineffective on obfuscated programs&lt;/p&gt;
+
+&lt;p&gt;Hence simple static-analysis identification of cryptographic functions is not suitable for such programs.&lt;/p&gt;
+
+&lt;p&gt;Solution: Proposed a tool called Aligot for identifying crypto functions and retrieving their parameters, in a manner that is essentially independent of the actual implementation. This tool more focuses on the input-output relationship of crypto functions and it mainly focuses on the problem of identifying cryptographic functions along a  given execution path.&lt;/p&gt;
+
+&lt;p&gt;The method consists of (1) the retrieval of I/O parameters of possible crypto code during its execution, (2) the comparison of the observed I/P relationship with those of known ones.&lt;/p&gt;
+
+&lt;h3 id=&quot;related-work&quot;&gt;Related Work:&lt;/h3&gt;
+
+&lt;p&gt;( dynamic analysis: Neo Lutz&lt;/p&gt;
+
+&lt;p&gt;indicators to recognize crypto code (1) presence of loops (2) a high ratio of bitwise arithmetic instructions (3) entropy change in the data.)&lt;/p&gt;
+
+&lt;p&gt;Most of the previous work cannot handle obfuscated programs.&lt;/p&gt;
+
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;Steps for identifying crypto functions in obfuscated programs:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;em&gt;Gather execution trace of the targeted program. [dynamic analysis]&lt;/em&gt;&lt;/p&gt;
+
+    &lt;p&gt;Collect &lt;strong&gt;dynamic instruction D&lt;/strong&gt; at each step during execution which is a tuple composed of&lt;/p&gt;
+
+    &lt;p&gt;memory address A[D]&lt;/p&gt;
+
+    &lt;p&gt;machine instruction I[D] executed at A[D]&lt;/p&gt;
+
+    &lt;p&gt;memory address read and written RA[D] and WA[D] by I[D]&lt;/p&gt;
+
+    &lt;p&gt;An execution trace T is a finite sequence D1; . . . ; Dn of dynamic instructions.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;em&gt;Extract cryptographic code with I/O parameters from execution traces. [loop data flow]&lt;/em&gt;&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;Simple loop definition:&lt;/strong&gt; a simple loop instance is defined by at least two repetitions of a machine instruction sequence, called its body&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;Nested Loop Definition:&lt;/strong&gt; we replace each instance of a same loop with the same identifier so that nested loop won’t be ignored.&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;Loop Instance Detection Algorithm:&lt;/strong&gt;  The LOOP recognition algorithm processes machine instructions from the execution trace one after the other, and stores them at the end of a list-like structure, named history.&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;/assets/img/posts/Aligot/Screen Shot 2020-07-06 at 3.28.47 PM.png&quot; alt=&quot;Firgure 3&quot; /&gt;&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;/assets/img/posts/Aligot/Screen Shot 2020-07-06 at 3.28.53 PM.png&quot; alt=&quot;Figure 4&quot; /&gt;&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;/assets/img/posts/Aligot/Screen Shot 2020-07-06 at 3.29.00 PM.png&quot; alt=&quot;Firgure 5&quot; /&gt;&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;Loop Input-output parameters&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;Loop instance parameters are low-level counterparts of high-level implementation parameters&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;LOOP DATA FLOW&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;We define the data flow between loop instances in a similar way to def-use chains [3]: two loop instances L1 and L2 are connected if L1 produces an output parameter used by L2 as an input parameter. For the sake of simplicity, we con- sider only memory parameters, because register parameters would require a precise taint tracking inside sequential code between loop instances.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Comparison with known cryptographic functions.&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;Comparison Algorithm&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;ol&gt;
+      &lt;li&gt;Generation of all possible I/O values&lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;Input parameter mapping&lt;/p&gt;
+
+        &lt;p&gt;the algorithm selects for each high-level parameter its possible values among the ones generated in the previous step&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;Comparison&lt;/p&gt;
+
+        &lt;p&gt;The program PF is executed on each possible combinations of its selected input values. If, at some point, the values produced are in the set of the possible output values generated in step 1, then it is a success.&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;evaluation&quot;&gt;Evaluation&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/Aligot/Screen Shot 2020-07-08 at 12.56.00 PM.png&quot; alt=&quot;Firgure 7&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/Aligot/Screen Shot 2020-07-08 at 12.57.28 PM.png&quot; alt=&quot;Firgure 8&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;TEA&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;When detecting TEA, they found that there was some alternative of TEA in malware. They confirmed this observation by creating a &lt;strong&gt;reference implementation&lt;/strong&gt; (parameter) for the Russian-TEA function. Aligot then successfully identified the code in Storm Worm as a Russian-TEA implementation, as indicated in Table 2.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;RC4&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;AES&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;MD5&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;RSA&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;This creates an outer loop pat- tern that is not directly detectable with Aligot because the trace generated does not belong to the LOOP language of Definition 2.&lt;/p&gt;
+
+&lt;p&gt;Aligot was able to detect RSA with some precautious.&lt;/p&gt;
+
+&lt;h3 id=&quot;limitation&quot;&gt;Limitation&lt;/h3&gt;
+
+&lt;p&gt;Aligot is only able to identify the code that is actually executed at the run time.&lt;/p&gt;
+
+&lt;p&gt;It is also limited to the functions in which they process a reference implementation.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 08 Jul 2020 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/research/2020/07/08/Aligot.html</link>
+        <guid isPermaLink="true">http://localhost:4000/research/2020/07/08/Aligot.html</guid>
+        
+        <category>research</category>
+        
+        <category>crypto</category>
+        
+        <category>english</category>
+        
+        
+        <category>research</category>
+        
+      </item>
+    
+      <item>
+        <title>Deep Learning in CryptoKnight Model</title>
+        <description>&lt;p&gt;CryptoKnight is a learning system that can easily incorporate new samples through the scalable synthesis of customisable cryptographic algorithms. The model is inspired by NLP (Natural Language Processing) approaches.&lt;/p&gt;
+
+&lt;p&gt;Nowadays, more and more deep learning techiniques are utilized in NLP problems, also in cryptographic field. In this blog, I will include the basic introduction to CNN (convolutional nueral network) and DCNN (Dynamic convolutional nueral network) which is implemented in CryptoKnight model. Here is the &lt;a href=&quot;https://www.mdpi.com/2078-2489/9/9/231&quot;&gt;CryptoKnight model&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;cnn&quot;&gt;CNN&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/Untitled.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;CNN is composed of different types of layers which extracts features of the input image.&lt;/p&gt;
+
+&lt;p&gt;convolutional layer/pooling layer/fully connected layer/classifier. (except for the classifier, what the other layers do is to extract features)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Convolutional layers&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Convolutional layers are the layers where *filters* are applied to the original image, or to other feature maps in a deep CNN. This is where most of the user-specified parameters are in the network.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Filter:&lt;/em&gt;
+&lt;img src=&quot;/assets/img/posts/Untitled (1).png&quot; /&gt;(example of kernel filters in CNN’s)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Pooling layers&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Pooling layers are similar to convolutional layers, but they perform a specific function such as max pooling, which takes the maximum value in a certain filter region, or average pooling, which takes the average value in a filter region. These are typically used to reduce the dimensionality of the network.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/Untitled (2).png&quot; /&gt;(example of how pooling layer work)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://datascience.stackexchange.com/questions/18341/how-are-weights-represented-in-a-convolution-neural-network&quot;&gt;How are weights represented in a convolution neural network?&lt;/a&gt; (explanation for weight in CNN)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Fully connected layers&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Fully connected layers are placed before the classification output of a CNN and are used to flatten the results before classification.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Classifier&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Classifier will assign a probability for the object on the image being what the algorithm predicts it is.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Helpful websites that help understanding CNN:&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.cs.ryerson.ca/~aharley/vis/conv/&quot;&gt;3D Visualization of a Convolutional Neural Network&lt;/a&gt;&lt;/strong&gt; 
+(Note that the layers in the visualization goes from bottom to the top.)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://primo.ai/index.php?title=Deep_Learning&quot;&gt;Deep Learning and DCNN&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://wildml.com/2015/11/understanding-convolutional-neural-networks-for-nlp/&quot;&gt;Understanding Convolutional Neural Networks for NLP&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;dcnn&quot;&gt;DCNN&lt;/h1&gt;
+
+&lt;p&gt;Relate work: A Convolutional Neural Network for Modeling Sentences&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1404.2188&quot;&gt;A Convolutional Neural Network for Modelling Sentences&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The layers in the DCNN interleave one-dimensional convolutional layers and dynamic k-max pooling layers.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;one-dimensional convolutional layer&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The one-dimensional convolution is an operation between a vector of *weights* *m* ∈ Rm and a vector of inputs viewed as a sequence *s* ∈ Rs
+
+*m* is the *filter* (explained in the CNN section)
+
+*s* is the input sentence and si ∈ R is a single feature value associated with the i-th word in the sentence
+
+In this layer, wide convolution is applied. A wide convolution ensures that all weights in the filter reach the entire sentence, including the words at the margins.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;k-max pooling layer&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pooling layer(explained in CNN)
+
+the pooling factor by which the signal of the matrix is reduced at once corresponds to s − m + 1
+
+dynamic k-max pooling operation is a k-max pooling operation where we let k be a function of the length of the sentence and the depth of the net- work.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/4.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;implementation-of-dcnn-in-cryptoknight-model&quot;&gt;Implementation of DCNN in CryptoKnight Model&lt;/h1&gt;
+
+&lt;p&gt;For each word, embeddings are defined as d, where di corresponds to the total weight of a particular operation, multiplied by its entropic score. Feature vector wi ∈ Wd is a therefore a column in sentence matrix s such that s ∈ Wd×s.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5.png&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 28 Jun 2020 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/research/2020/06/28/deep-learning-in-cryptoknight-model.html</link>
+        <guid isPermaLink="true">http://localhost:4000/research/2020/06/28/deep-learning-in-cryptoknight-model.html</guid>
+        
+        <category>research</category>
+        
+        <category>deep learning</category>
+        
+        <category>english</category>
+        
+        
+        <category>research</category>
+        
+      </item>
+    
+      <item>
+        <title>Asm2Vec: Binary Clone Search</title>
+        <description>&lt;p&gt;Asm2Vec is an assembly code representation learning model also an assembly clone search approach. In this blog, I am going to share the notes i took when reading the paper.&lt;/p&gt;
+
+&lt;p&gt;Here is the &lt;a href=&quot;https://www.computer.org/csdl/proceedings-article/sp/2019/666000a038/19skfc3ZfKo&quot; title=&quot;Asm2Vec: Boosting Static Representation Robustness for Binary Clone Search against Code Obfuscation and Compiler Optimization&quot;&gt;Asm2Vec paper&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-with-existing-approaches-and-solutions&quot;&gt;Problems with existing approaches and Solutions:&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Problem1 :&lt;/strong&gt;
+Failed to consider the relationships among features. They assumed each feature or category is an independent dimension.
+Proposed solution: incorporate lexical semantic relationship by learning these relationships directly from plain assembly code. (eh. memcpy, strcpy, memncpy)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Problem2 :&lt;/strong&gt;
+Assume that features are equally important or assign the features with unideal weights.
+Proposed solution: train a neural network model to read many assembly code data and let the model identify the best representation that distinguishes one function from the rest.&lt;/p&gt;
+
+&lt;h2 id=&quot;overall-workflow&quot;&gt;Overall Workflow&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/Screen_Shot_2020-06-04_at_11.16.34_AM.png&quot; /&gt;
+&lt;strong&gt;Steps&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Training&lt;/strong&gt;: build NN model&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Produce&lt;/strong&gt;: produce a vector representation for each RP&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Estimate&lt;/strong&gt;: given ft(target function), use the model in 1 to estimate vector rep&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Compare&lt;/strong&gt;: compare the vector of ft against the other vectors in the RP&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;the-asm2vec-model-step12&quot;&gt;The Asm2Vec Model (Step1+2)&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/Screen_Shot_2020-06-04_at_11.28.19_AM.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;How to treat each RP&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;fs → multiple sequences → list of instructions → contain a list of operands and one operation&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;How to model assembly function into multiple sequences&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Selective Callee Expansion: Using function inlining to expand callee 
+Edge coverage. sample all edges
+Random Walk → generated sequence is much longer than the edge sampling&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;How to deal with RP function&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Map each EP fun fs to vector with size of R2xd
+size is 2xd because vector is consist of the operation and operands. 
+Intuition is to use the current function’s vector and the context provided by the neighbor instructors tp predict the current instruction.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Math behind it&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;treat operands and operations in assembly code as token. Map each token t into a numeric vector vt with size Rd and another vt’ with size R2xd.&lt;/p&gt;
+
+&lt;p&gt;vt - visualize the relationship / vt’ - token prediction&lt;/p&gt;
+</description>
+        <pubDate>Sun, 21 Jun 2020 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/research/2020/06/21/Asm2Vec-model-notes.html</link>
+        <guid isPermaLink="true">http://localhost:4000/research/2020/06/21/Asm2Vec-model-notes.html</guid>
+        
+        <category>research</category>
+        
+        <category>crypto</category>
+        
+        <category>english</category>
+        
+        
+        <category>research</category>
+        
+      </item>
+    
+  </channel>
+</rss>
