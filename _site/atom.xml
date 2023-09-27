@@ -4,7 +4,7 @@
  <title>Hi, I&apos;m Zheying Lu</title>
  <link href="http://localhost:4000/atom.xml" rel="self"/>
  <link href="http://localhost:4000/"/>
- <updated>2022-01-25T19:32:44-05:00</updated>
+ <updated>2023-09-26T22:37:10-06:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Zheying Lu</name>
@@ -15,7 +15,7 @@
  <entry>
    <title>Aligot: A tool for cryptographic function identification</title>
    <link href="http://localhost:4000/research/2020/07/08/Aligot.html"/>
-   <updated>2020-07-08T00:00:00-04:00</updated>
+   <updated>2020-07-08T00:00:00-06:00</updated>
    <id>http://localhost:4000/research/2020/07/08/Aligot</id>
    <content type="html">&lt;p&gt;Aligot is a papar pubulished in 2012 and it has made a significant progress on cryptographic function identification. Here is the &lt;a href=&quot;https://hal.inria.fr/hal-00762924/document&quot;&gt;Aligo paper&lt;/a&gt;.&lt;/p&gt;
 
@@ -142,7 +142,7 @@
  <entry>
    <title>Deep Learning in CryptoKnight Model</title>
    <link href="http://localhost:4000/research/2020/06/28/deep-learning-in-cryptoknight-model.html"/>
-   <updated>2020-06-28T00:00:00-04:00</updated>
+   <updated>2020-06-28T00:00:00-06:00</updated>
    <id>http://localhost:4000/research/2020/06/28/deep-learning-in-cryptoknight-model</id>
    <content type="html">&lt;p&gt;CryptoKnight is a learning system that can easily incorporate new samples through the scalable synthesis of customisable cryptographic algorithms. The model is inspired by NLP (Natural Language Processing) approaches.&lt;/p&gt;
 
@@ -233,7 +233,7 @@ dynamic k-max pooling operation is a k-max pooling operation where we let k be a
  <entry>
    <title>Asm2Vec: Binary Clone Search</title>
    <link href="http://localhost:4000/research/2020/06/21/Asm2Vec-model-notes.html"/>
-   <updated>2020-06-21T00:00:00-04:00</updated>
+   <updated>2020-06-21T00:00:00-06:00</updated>
    <id>http://localhost:4000/research/2020/06/21/Asm2Vec-model-notes</id>
    <content type="html">&lt;p&gt;Asm2Vec is an assembly code representation learning model also an assembly clone search approach. In this blog, I am going to share the notes i took when reading the paper.&lt;/p&gt;
 

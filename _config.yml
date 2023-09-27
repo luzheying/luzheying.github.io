@@ -17,7 +17,7 @@ minimal_mistakes_skin: "air"
 title: "Hi, I'm Zheying Lu"
 email: 'zl3091@columbia.edu'
 linkedin: 'www.linkedin.com/in/zheying-lu?trk=public_profile_browsemap'
-description: "A Master's student at Columbia studying computer science with a concentration in Vision, Graphic and Interaction. I work with backend and database. I'm also a co-founder of Seeker, an online community for women in the workplace."
+description: "Associate Product Manager at Access Development"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://luzheying.github.io/" # the base hostname & protocol for your site, e.g. https://example.com
 # twitter_username: ''
@@ -109,7 +109,7 @@ defaults:
 
 
 ### Phantom settings
-footer_text: '© 2021 Zheying Lu'
+footer_text: '© 2023 Zheying Lu'
 admin_name: 'Zheying Lu'
 # google_analytics: "UA-9999999-99" # Update with your own tracking ID
 enable_contact: false
